@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def count_divs(url):
+def count_word_occurrences(url, target_word):
     try:
         # Fetch the HTML content of the website
         response = requests.get(url)
@@ -10,18 +10,20 @@ def count_divs(url):
         # Parse the HTML content using BeautifulSoup
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Count the number of HTML div tags
-        div_count = len(soup.find_all('div'))
+        # Count the occurrences of the target word
+        word_count = soup.text.lower().count(target_word.lower())
 
-        return div_count
+        return word_count
 
     except requests.exceptions.RequestException as e:
         print(f"Error fetching the website: {e}")
         return None
 
 if __name__ == "__main__":
-    website_url = "https://www.one.co.il/"
-    div_count = count_divs(website_url)
+    website_url = "https://www.one.co.il/"  # Change this to the desired website URL
+    target_word = "כדור"  # Change this to the desired word
 
-    if div_count is not None:
-        print(f"The number of divs on {website_url} is: {div_count}")
+    word_count = count_word_occurrences(website_url, target_word)
+
+    if word_count is not None:
+        print(f"The word '{target_word}' appears {word_count} times on {website_url}")
